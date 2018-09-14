@@ -17,6 +17,7 @@ public class IocContextImpl implements IoCContext{
         if (beanClazz == null) {
             throw new IllegalArgumentException("beanClazz is mandatory");
         }
+
         if (beanClazz.isInterface()||Modifier.isAbstract(beanClazz.getModifiers())){
             throw new IllegalArgumentException(String.format("%s is abstract", beanClazz.getName()));
         }
@@ -58,6 +59,10 @@ public class IocContextImpl implements IoCContext{
 
         if (beanClazz == null || resolveClazz == null) {
             throw new IllegalArgumentException("beanClazz is mandatory");
+        }
+
+        if (beanClazz.isInterface()||Modifier.isAbstract(beanClazz.getModifiers())){
+            throw new IllegalArgumentException(String.format("%s is abstract", beanClazz.getName()));
         }
 
         try {

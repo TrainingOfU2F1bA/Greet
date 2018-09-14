@@ -1,4 +1,4 @@
 package xin.saul.greet.testclass;
 
-public class MotherClass {
+abstract public class MotherClass extends GrandMotherClass{
 }

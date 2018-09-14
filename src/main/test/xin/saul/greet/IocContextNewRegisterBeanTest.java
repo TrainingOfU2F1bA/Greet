@@ -20,6 +20,20 @@ public class IocContextNewRegisterBeanTest {
 
     }
 
+
+    @Test
+    void test_should_throw_IllegalArgumentException_when_beanClazz_is_abstract_class() {
+
+
+        IocContextImpl context = new IocContextImpl();
+        Executable executable =() -> {
+            context.registerBean(GrandMotherClass.class,MotherClass.class);
+        };
+
+        assertThrows(IllegalArgumentException.class, executable,"xin.saul.greet.testclass.MotherClass is abstract");
+
+    }
+
     @Test
     void test_should_throw_IllegalArgumentException_when_resolveClazz_is_null() {
 
@@ -146,5 +160,6 @@ public class IocContextNewRegisterBeanTest {
         assertEquals(SubClass.class,bean.getClass());
 
     }
+
 
 }
