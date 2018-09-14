@@ -73,4 +73,16 @@ public class IocContextTest{
     }
 
 
+    @Test
+    void test_should_throw_IllegalArgumentException_when_resolveClazz_is_null() {
+
+
+        Executable executable =() -> {
+            IocContextImpl context = new IocContextImpl();
+            context.getBean(null);
+        };
+
+        assertThrows(IllegalArgumentException.class, executable);
+
+    }
 }
