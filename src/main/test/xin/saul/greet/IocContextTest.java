@@ -30,4 +30,19 @@ public class IocContextTest{
         assertThrows(IllegalArgumentException.class, executable,"beanClazz is manatory");
 
     }
+
+
+    @Test
+    void test_should_throw_IllegalArgumentException_when_beanClazz_is_abstract_class() throws InstantiationException, IllegalAccessException {
+
+
+        Executable executable =() -> {
+            IocContextImpl context = new IocContextImpl();
+            context.registerBean(AbstractClass.class);
+        };
+
+        assertThrows(IllegalArgumentException.class, executable,"xin.saul.greet.AbstractClass is abstract");
+
+    }
+
 }
