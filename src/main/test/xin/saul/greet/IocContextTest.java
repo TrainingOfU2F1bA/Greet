@@ -3,7 +3,8 @@ package xin.saul.greet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class IocContextTest{
 
@@ -19,7 +20,7 @@ public class IocContextTest{
     }
 
     @Test
-    void test_should_throw_IllegalArgumentException_when_beanClazz_is_null() throws InstantiationException, IllegalAccessException {
+    void test_should_throw_IllegalArgumentException_when_beanClazz_is_null() {
 
 
         Executable executable =() -> {
@@ -33,7 +34,7 @@ public class IocContextTest{
 
 
     @Test
-    void test_should_throw_IllegalArgumentException_when_beanClazz_is_abstract_class() throws InstantiationException, IllegalAccessException {
+    void test_should_throw_IllegalArgumentException_when_beanClazz_is_abstract_class() {
 
 
         Executable executable =() -> {
@@ -45,4 +46,16 @@ public class IocContextTest{
 
     }
 
+    @Test
+    void test_should_throw_IllegalArgumentException_when_beanClazz_is_class_without_default_construct() {
+
+
+        Executable executable =() -> {
+            IocContextImpl context = new IocContextImpl();
+            context.registerBean(ClassWithoutDefaultConstructor.class);
+        };
+
+        assertThrows(IllegalArgumentException.class, executable,"xin.saul.greet.ClassWithoutDefaultConstructor has no default constructor");
+
+    }
 }

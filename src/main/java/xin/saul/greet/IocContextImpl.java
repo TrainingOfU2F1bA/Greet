@@ -15,6 +15,11 @@ public class IocContextImpl implements IoCContext{
         if (Modifier.isAbstract(beanClazz.getModifiers())){
             throw new IllegalArgumentException(String.format("%s is abstract", beanClazz.getName()));
         }
+        try {
+            beanClazz.getConstructor();
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException(String.format("%s has no default constructor", beanClazz.getName()));
+        }
         hashMap.put(beanClazz,beanClazz.newInstance());
     }
 
