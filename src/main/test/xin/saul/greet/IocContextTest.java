@@ -174,4 +174,16 @@ public class IocContextTest{
         assertEquals(SonClass.class,bean.getClass());
 
     }
+
+    @Test
+    void test_should_cover_after_register_new_class_with_same_interface() throws InstantiationException, IllegalAccessException {
+        IocContextImpl context = new IocContextImpl();
+
+        context.registerBean(MotherInterface.class,SonClass.class);
+        context.registerBean(MotherInterface.class,SecondSonClass.class);
+        MotherInterface bean = context.getBean(MotherInterface.class);
+
+        assertEquals(SecondSonClass.class,bean.getClass());
+
+    }
 }
