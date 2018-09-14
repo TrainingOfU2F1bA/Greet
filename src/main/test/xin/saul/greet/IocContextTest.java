@@ -138,4 +138,18 @@ public class IocContextTest{
         assertEquals(MyBean.class,bean.getClass());
     }
 
+    @Test
+    void should_get_new_instance_when_getbean() throws InstantiationException, IllegalAccessException {
+        IocContextImpl context = new IocContextImpl();
+
+        context.registerBean(MyBean.class);
+
+        MyBean bean = context.getBean(MyBean.class);
+
+        MyBean myBean = context.getBean(MyBean.class);
+
+        assertNotSame(bean,myBean);
+    }
+
+
 }
