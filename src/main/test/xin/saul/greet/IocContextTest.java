@@ -152,4 +152,15 @@ public class IocContextTest{
     }
 
 
+    @Test
+    void test_should_throw_IllegalArgumentException_when_beanClazz_is_interface() {
+
+        IocContextImpl context = new IocContextImpl();
+        Executable executable =() -> {
+            context.registerBean(IoCContext.class);
+        };
+
+        assertThrows(IllegalArgumentException.class, executable,"xin.saul.greet.IoCContext is abstract");
+
+    }
 }
