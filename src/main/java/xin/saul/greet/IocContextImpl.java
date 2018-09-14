@@ -20,11 +20,14 @@ public class IocContextImpl implements IoCContext{
         } catch (NoSuchMethodException e) {
             throw new IllegalArgumentException(String.format("%s has no default constructor", beanClazz.getName()));
         }
-        hashMap.put(beanClazz,beanClazz.newInstance());
+        if (!hashMap.containsKey(beanClazz)) hashMap.put(beanClazz,beanClazz);
     }
 
     @Override
-    public <T> T getBean(Class<T> resolveClazz) {
-        return (T) hashMap.get(resolveClazz);
+    public <T> T getBean(Class<T> resolveClazz) throws IllegalAccessException, InstantiationException {
+        if (resolveClazz == null) {
+            throw new IllegalArgumentException("resolveClazz cant be null");
+        }
+        return ((Class<T>) hashMap.get(resolveClazz)).newInstance();
     }
 }

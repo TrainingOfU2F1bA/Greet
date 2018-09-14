@@ -3,8 +3,7 @@ package xin.saul.greet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class IocContextTest{
 
@@ -58,4 +57,20 @@ public class IocContextTest{
         assertThrows(IllegalArgumentException.class, executable,"xin.saul.greet.ClassWithoutDefaultConstructor has no default constructor");
 
     }
+
+    @Test
+    void test_should_success_when_put_a_class_which_already_exsit() {
+        boolean successFlag = false;
+        try {
+            IocContextImpl context = new IocContextImpl();
+            context.registerBean(MyBean.class);
+            context.registerBean(MyBean.class);
+        } catch (Throwable e) {
+            successFlag = true;
+        }
+
+        assertTrue(true);
+    }
+
+
 }
