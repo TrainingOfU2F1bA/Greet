@@ -7,6 +7,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class IocContextNewRegisterBeanTest {
 
+
+
+    @Test
+    void test_should_throw_IllegalArgumentException_when_resolveClazz_is_null() {
+
+
+        IocContextImpl context = new IocContextImpl();
+        Executable executable =() -> {
+            context.registerBean(null,SonClass.class);
+        };
+
+        assertThrows(IllegalArgumentException.class, executable,"beanClazz is manatory");
+
+    }
+
     @Test
     void test_should_throw_IllegalArgumentException_when_beanClazz_is_null() {
 
