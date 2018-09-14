@@ -57,8 +57,9 @@ public class IocContextImpl implements IoCContext{
     public <T> T createInstance(Class<T> resolveClazz) throws IllegalAccessException, InstantiationException {
         T bean =((Class<T>) hashMap.get(resolveClazz)).newInstance();
         for (Field field : resolveClazz.getDeclaredFields()) {
+            field.setAccessible(true);
+            if (field.get(bean) != null) continue;
             if (field.isAnnotationPresent(CreateOnTheFly.class)) {
-                field.setAccessible(true);
                 Class<?> type = field.getType();
                 if (!hashMap.containsKey(type))
                     throw new IllegalStateException("There is a field which type have not been register");

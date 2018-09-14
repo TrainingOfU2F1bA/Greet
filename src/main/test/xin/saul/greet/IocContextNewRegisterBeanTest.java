@@ -27,7 +27,7 @@ public class IocContextNewRegisterBeanTest {
 
         IocContextImpl context = new IocContextImpl();
         Executable executable =() -> {
-            context.registerBean(GrandMotherClass.class,MotherClass.class);
+            context.registerBean(GrandMotherClass.class,AbstractMotherClass.class);
         };
 
         assertThrows(IllegalArgumentException.class, executable,"xin.saul.greet.testclass.MotherClass is abstract");
