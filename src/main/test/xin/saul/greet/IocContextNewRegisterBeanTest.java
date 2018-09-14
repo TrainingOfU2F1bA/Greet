@@ -134,4 +134,17 @@ public class IocContextNewRegisterBeanTest {
         assertEquals(SecondSonClass.class,bean.getClass());
 
     }
+
+
+    @Test
+    void test_should_can_get_instance_with_base_class() throws InstantiationException, IllegalAccessException {
+        IocContextImpl context = new IocContextImpl();
+
+        context.registerBean(MotherClass.class,SubClass.class);
+        MotherClass bean = context.getBean(MotherClass.class);
+
+        assertEquals(SubClass.class,bean.getClass());
+
+    }
+
 }
