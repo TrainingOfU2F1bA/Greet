@@ -2,6 +2,7 @@ package xin.saul.greet;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import xin.saul.greet.testclass.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,7 +43,7 @@ public class IocContextTest{
             context.registerBean(AbstractClass.class);
         };
 
-        assertThrows(IllegalArgumentException.class, executable,"xin.saul.greet.AbstractClass is abstract");
+        assertThrows(IllegalArgumentException.class, executable,"xin.saul.greet.testclass.AbstractClass is abstract");
 
     }
 
@@ -55,7 +56,7 @@ public class IocContextTest{
             context.registerBean(ClassWithoutDefaultConstructor.class);
         };
 
-        assertThrows(IllegalArgumentException.class, executable,"xin.saul.greet.ClassWithoutDefaultConstructor has no default constructor");
+        assertThrows(IllegalArgumentException.class, executable,"xin.saul.greet.testclass.ClassWithoutDefaultConstructor has no default constructor");
 
     }
 

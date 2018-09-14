@@ -1,4 +1,4 @@
-package xin.saul.greet;
+package xin.saul.greet.testclass;
 
 public class ClassWithBadConstruct {
     public ClassWithBadConstruct() {
