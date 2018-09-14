@@ -161,5 +161,18 @@ public class IocContextNewRegisterBeanTest {
 
     }
 
+    @Test
+    void test_should_can_get_instance_with_different_base_class_or_interface() throws InstantiationException, IllegalAccessException {
+         IocContextImpl context = new IocContextImpl();
 
+        context.registerBean(MotherClass.class,SubClass.class);
+        context.registerBean(MotherInterface.class,SubClass.class);
+
+        MotherClass bean = context.getBean(MotherClass.class);
+        MotherInterface myBean= context.getBean(MotherInterface.class);
+
+        assertEquals(SubClass.class,bean.getClass());
+        assertEquals(SubClass.class,myBean.getClass());
+        assertNotSame(bean,myBean);
+    }
 }
