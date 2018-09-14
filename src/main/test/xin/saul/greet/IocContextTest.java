@@ -15,6 +15,7 @@ public class IocContextTest{
         MyBean bean = context.getBean(MyBean.class);
 
         assertNotNull(bean);
+        assertEquals(MyBean.class,bean.getClass());
 
     }
 
@@ -22,8 +23,8 @@ public class IocContextTest{
     void test_should_throw_IllegalArgumentException_when_beanClazz_is_null() {
 
 
+        IocContextImpl context = new IocContextImpl();
         Executable executable =() -> {
-            IocContextImpl context = new IocContextImpl();
             context.registerBean(null);
         };
 
@@ -36,8 +37,8 @@ public class IocContextTest{
     void test_should_throw_IllegalArgumentException_when_beanClazz_is_abstract_class() {
 
 
+        IocContextImpl context = new IocContextImpl();
         Executable executable =() -> {
-            IocContextImpl context = new IocContextImpl();
             context.registerBean(AbstractClass.class);
         };
 
@@ -49,8 +50,8 @@ public class IocContextTest{
     void test_should_throw_IllegalArgumentException_when_beanClazz_is_class_without_default_construct() {
 
 
+        IocContextImpl context = new IocContextImpl();
         Executable executable =() -> {
-            IocContextImpl context = new IocContextImpl();
             context.registerBean(ClassWithoutDefaultConstructor.class);
         };
 
@@ -60,16 +61,17 @@ public class IocContextTest{
 
     @Test
     void test_should_success_when_put_a_class_which_already_exsit() {
-        boolean successFlag = false;
+
+        boolean successFlag = true;
+        IocContextImpl context = new IocContextImpl();
         try {
-            IocContextImpl context = new IocContextImpl();
             context.registerBean(MyBean.class);
             context.registerBean(MyBean.class);
         } catch (Throwable e) {
-            successFlag = true;
+            successFlag = false;
         }
 
-        assertTrue(true);
+        assertTrue(successFlag);
     }
 
 
@@ -77,8 +79,8 @@ public class IocContextTest{
     void test_should_throw_IllegalArgumentException_when_resolveClazz_is_null() {
 
 
+        IocContextImpl context = new IocContextImpl();
         Executable executable =() -> {
-            IocContextImpl context = new IocContextImpl();
             context.getBean(null);
         };
 
@@ -89,8 +91,8 @@ public class IocContextTest{
     @Test
     void test_should_throw_IllegalArgumentException_when_resolveClazz_had_not_be_register() {
 
+        IocContextImpl context = new IocContextImpl();
         Executable executable =() -> {
-            IocContextImpl context = new IocContextImpl();
             context.getBean(MyBean.class);
         };
 
@@ -101,8 +103,8 @@ public class IocContextTest{
     @Test
     void test_should_throw_exception_that_constructor_throw() {
 
+        IocContextImpl context = new IocContextImpl();
         Executable executable =() -> {
-            IocContextImpl context = new IocContextImpl();
             context.registerBean(ClassWithBadConstruct.class);
             context.getBean(ClassWithBadConstruct.class);
         };
@@ -113,8 +115,9 @@ public class IocContextTest{
 
     @Test
     void test_should_throw_IllegalArgumentException_call_register_bean_while_get_bean_have_been_running() {
+
+        IocContextImpl context = new IocContextImpl();
         Executable executable =() -> {
-            IocContextImpl context = new IocContextImpl();
             context.getBean(ClassWithContructRegisterBean.class);
             context.registerBean(ClassWithContructRegisterBean.class);
         };
