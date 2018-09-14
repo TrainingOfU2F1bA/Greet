@@ -8,6 +8,9 @@ public class IocContextImpl implements IoCContext{
 
     @Override
     public void registerBean(Class<?> beanClazz) throws IllegalAccessException, InstantiationException {
+        if (beanClazz == null) {
+            throw new IllegalArgumentException("beanClazz is mandatory");
+        }
         hashMap.put(beanClazz,beanClazz.newInstance());
     }
 
