@@ -28,6 +28,9 @@ public class IocContextImpl implements IoCContext{
         if (resolveClazz == null) {
             throw new IllegalArgumentException("resolveClazz cant be null");
         }
+        if (!hashMap.containsKey(resolveClazz)){
+            throw new IllegalStateException("resolveClazz had not be register first");
+        }
         return ((Class<T>) hashMap.get(resolveClazz)).newInstance();
     }
 }
