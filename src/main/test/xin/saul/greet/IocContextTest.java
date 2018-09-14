@@ -97,4 +97,17 @@ public class IocContextTest{
         assertThrows(IllegalStateException.class, executable);
 
     }
+
+    @Test
+    void test_should_throw_exception_that_constructor_throw() {
+
+        Executable executable =() -> {
+            IocContextImpl context = new IocContextImpl();
+            context.registerBean(ClassWithBadConstruct.class);
+            context.getBean(ClassWithBadConstruct.class);
+        };
+
+        assertThrows(ConstructException.class, executable);
+
+    }
 }
