@@ -1,5 +1,8 @@
 package xin.saul.greet;
 
+import xin.saul.greet.annotation.CreateOnTheFly;
+
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
@@ -44,11 +47,25 @@ public class IocContextImpl implements IoCContext{
             throw new IllegalStateException("resolveClazz had not be register first");
         }
 
-        T t = ((Class<T>) hashMap.get(resolveClazz)).newInstance();
+        T t = createInstance(resolveClazz);
 
         isBeenGetingBean = false;
 
         return t;
+    }
+
+    public <T> T createInstance(Class<T> resolveClazz) throws IllegalAccessException, InstantiationException {
+        T bean =((Class<T>) hashMap.get(resolveClazz)).newInstance();
+        for (Field field : resolveClazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(CreateOnTheFly.class)) {
+                field.setAccessible(true);
+                Class<?> type = field.getType();
+                if (!hashMap.containsKey(type))
+                    throw new IllegalStateException("There is a field which type have not been register");
+                field.set(bean,getBean(type));
+            }
+        }
+        return bean;
     }
 
     @Override
