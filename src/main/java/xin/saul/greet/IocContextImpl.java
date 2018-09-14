@@ -6,9 +6,13 @@ import java.util.HashMap;
 public class IocContextImpl implements IoCContext{
 
     private HashMap<Class<?>, Object> hashMap = new HashMap<>();
+    private boolean isBeenGetingBean;
 
     @Override
     public void registerBean(Class<?> beanClazz) throws IllegalAccessException, InstantiationException {
+        if (isBeenGetingBean) {
+            throw new IllegalStateException("can call register while getBean");
+        }
         if (beanClazz == null) {
             throw new IllegalArgumentException("beanClazz is mandatory");
         }
@@ -25,12 +29,18 @@ public class IocContextImpl implements IoCContext{
 
     @Override
     public <T> T getBean(Class<T> resolveClazz) throws IllegalAccessException, InstantiationException {
+        isBeenGetingBean = true;
         if (resolveClazz == null) {
             throw new IllegalArgumentException("resolveClazz cant be null");
         }
         if (!hashMap.containsKey(resolveClazz)){
             throw new IllegalStateException("resolveClazz had not be register first");
         }
-        return ((Class<T>) hashMap.get(resolveClazz)).newInstance();
+
+        T t = ((Class<T>) hashMap.get(resolveClazz)).newInstance();
+
+        isBeenGetingBean = false;
+
+        return t;
     }
 }

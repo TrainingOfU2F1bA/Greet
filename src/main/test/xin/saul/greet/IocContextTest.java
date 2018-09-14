@@ -110,4 +110,16 @@ public class IocContextTest{
         assertThrows(ConstructException.class, executable);
 
     }
+
+    @Test
+    void test_should_throw_IllegalArgumentException_call_register_bean_while_get_bean_have_been_running() {
+        Executable executable =() -> {
+            IocContextImpl context = new IocContextImpl();
+            context.getBean(ClassWithContructRegisterBean.class);
+            context.registerBean(ClassWithContructRegisterBean.class);
+        };
+
+        assertThrows(IllegalStateException.class, executable);
+    }
+
 }
