@@ -104,8 +104,8 @@ public class IocContextTest{
     void test_should_throw_exception_that_constructor_throw() {
 
         IocContextImpl context = new IocContextImpl();
+        context.registerBean(ClassWithBadConstruct.class);
         Executable executable =() -> {
-            context.registerBean(ClassWithBadConstruct.class);
             context.getBean(ClassWithBadConstruct.class);
         };
 
@@ -161,6 +161,17 @@ public class IocContextTest{
         };
 
         assertThrows(IllegalArgumentException.class, executable,"xin.saul.greet.IoCContext is abstract");
+
+    }
+
+    @Test
+    void test_should_can_get_instance_with_base_interface() throws InstantiationException, IllegalAccessException {
+        IocContextImpl context = new IocContextImpl();
+
+        context.registerBean(MotherInterface.class,SonClass.class);
+        MotherInterface bean = context.getBean(MotherInterface.class);
+
+        assertEquals(SonClass.class,bean.getClass());
 
     }
 }
