@@ -125,4 +125,17 @@ public class IocContextTest{
         assertThrows(IllegalStateException.class, executable);
     }
 
+    @Test
+    void should_can_get_different_instance_of_different_class() throws InstantiationException, IllegalAccessException {
+
+        IocContextImpl context = new IocContextImpl();
+        context.registerBean(MySecondBean.class);
+        context.registerBean(MyBean.class);
+        MyBean bean = context.getBean(MyBean.class);
+        MySecondBean mySecondBean = context.getBean(MySecondBean.class);
+
+        assertEquals(MySecondBean.class,mySecondBean.getClass());
+        assertEquals(MyBean.class,bean.getClass());
+    }
+
 }
