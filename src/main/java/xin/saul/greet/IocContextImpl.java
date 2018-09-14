@@ -52,6 +52,20 @@ public class IocContextImpl implements IoCContext{
 
     @Override
     public <T> void registerBean(Class<? super T> resolveClazz, Class<T> beanClazz) {
+        if (isBeenGetingBean) {
+            throw new IllegalStateException("can call register while getBean");
+        }
+
+        if (beanClazz == null || resolveClazz == null) {
+            throw new IllegalArgumentException("beanClazz is mandatory");
+        }
+
+        try {
+            beanClazz.getConstructor();
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException(String.format("%s has no default constructor", beanClazz.getName()));
+        }
+
         hashMap.put(resolveClazz,beanClazz);
     }
 }

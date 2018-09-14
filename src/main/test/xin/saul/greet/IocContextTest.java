@@ -165,26 +165,4 @@ public class IocContextTest{
 
     }
 
-    @Test
-    void test_should_can_get_instance_with_base_interface() throws InstantiationException, IllegalAccessException {
-        IocContextImpl context = new IocContextImpl();
-
-        context.registerBean(MotherInterface.class,SonClass.class);
-        MotherInterface bean = context.getBean(MotherInterface.class);
-
-        assertEquals(SonClass.class,bean.getClass());
-
-    }
-
-    @Test
-    void test_should_cover_after_register_new_class_with_same_interface() throws InstantiationException, IllegalAccessException {
-        IocContextImpl context = new IocContextImpl();
-
-        context.registerBean(MotherInterface.class,SonClass.class);
-        context.registerBean(MotherInterface.class,SecondSonClass.class);
-        MotherInterface bean = context.getBean(MotherInterface.class);
-
-        assertEquals(SecondSonClass.class,bean.getClass());
-
-    }
 }
