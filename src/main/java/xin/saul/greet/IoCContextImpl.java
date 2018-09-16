@@ -4,9 +4,7 @@ import xin.saul.greet.annotation.CreateOnTheFly;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class IoCContextImpl implements IoCContext{
 
@@ -50,7 +48,7 @@ public class IoCContextImpl implements IoCContext{
             throw new IllegalStateException("resolveClazz had not be register first");
         }
 
-        Map<Class<?>, Object> map = new HashMap<>();
+        Map<Class<?>, List<Class<?>>> map = new HashMap<>();
         T t = createInstance(resolveClazz,map);
 
         isBeenGetingBean = false;
@@ -58,36 +56,57 @@ public class IoCContextImpl implements IoCContext{
         return t;
     }
 
-    public <T> T createInstance(Class<T> resolveClazz, Map<Class<?>, Object> map) throws IllegalAccessException, InstantiationException {
+    public <T> T createInstance(Class<T> resolveClazz, Map<Class<?>, List<Class<?>>> map) throws IllegalAccessException, InstantiationException {
         T bean = ((Class<T>) hashMap.get(resolveClazz)).newInstance();
 
         if (AutoCloseable.class.isInstance(bean)) {
             closableStack.push((AutoCloseable) bean);
         }
-        map.put(resolveClazz, bean);
 
-        Class clz = resolveClazz;
 
-        injectDependencyField(clz, map, bean);
-
+        injectDependencyField(resolveClazz, map, bean);
 
         return bean;
     }
 
-    private <T> void injectDependencyField(Class<T> clz, Map<Class<?>, Object> map, T bean) throws IllegalAccessException, InstantiationException {
+    private <T> void injectDependencyField(Class<T> clz, Map<Class<?>, List<Class<?>>> map, T bean) throws IllegalAccessException, InstantiationException {
         if (!clz.isInterface() && !clz.getSuperclass().equals(Object.class)) injectDependencyField(clz.getSuperclass(),map,bean);
+
+        ArrayList<Class<?>> dependencesList = new ArrayList<>();
+        map.put(clz,dependencesList);
         for (Field field : clz.getDeclaredFields()) {
             field.setAccessible(true);
             if (field.isAnnotationPresent(CreateOnTheFly.class)) {
+//                if (map.containsKey(clz))
+//                    throw new IllegalStateException("There is some field casuse cyclic dependence");
+
                 Class<?> type = field.getType();
-                if (map.containsKey(type)) {
-                    throw new IllegalStateException("There is some field casuse cyclic dependence");
-                }
+
                 if (!hashMap.containsKey(type))
                     throw new IllegalStateException("There is a field which type have not been register");
-                field.set(bean, createInstance(type,map));
+
+                dependencesList.add(type);
+
+                isCyclic(map, type , type);
+
+                Object instance = createInstance(type, map);
+
+                field.set(bean, instance);
             }
         }
+    }
+
+    private <T> boolean isCyclic(Map<Class<?>, List<Class<?>>> map, Class<?> type, Class<T> clz) {
+        List<Class<?>> dependences = map.get(type);
+
+        if (dependences !=null)
+        for (Class<?> dependence : dependences) {
+            if (dependence.equals(clz))
+                throw new IllegalStateException("There is some field casuse cyclic dependence");
+            else
+                isCyclic(map, dependence, clz);
+        }
+        return false;
     }
 
     @Override
