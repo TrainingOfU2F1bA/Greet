@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-public class IocContextImpl implements IoCContext{
+public class IoCContextImpl implements IoCContext{
 
     private HashMap<Class<?>, Object> hashMap = new HashMap<>();
     private Stack<AutoCloseable> closableStack = new Stack<>();

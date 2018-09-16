@@ -1,10 +1,10 @@
 package xin.saul.greet.testclass;
 
-import xin.saul.greet.IocContextImpl;
+import xin.saul.greet.IoCContextImpl;
 
 public class ClassWithContructRegisterBean implements MotherInterface{
     public ClassWithContructRegisterBean() throws InstantiationException, IllegalAccessException {
-        IocContextImpl iocContext = new IocContextImpl();
+        IoCContextImpl iocContext = new IoCContextImpl();
         iocContext.registerBean(MyBean.class);
     }
 }

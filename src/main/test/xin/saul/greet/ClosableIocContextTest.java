@@ -17,7 +17,7 @@ public class ClosableIocContextTest {
     void test_should_close_all_autoclosable_that_context_create() throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
-        IocContextImpl iocContext = new IocContextImpl();
+        IoCContextImpl iocContext = new IoCContextImpl();
         iocContext.registerBean(AutoClosableImpl.class);
         iocContext.registerBean(SecondAutoClosableImpl.class);
 
@@ -33,7 +33,7 @@ public class ClosableIocContextTest {
     void test_should_try_to_close_all_autoclosable_even_if_a_exception_throw_in_while_certain_instance_close() throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
-        IocContextImpl iocContext = new IocContextImpl();
+        IoCContextImpl iocContext = new IoCContextImpl();
         iocContext.registerBean(AutoClosableImpl.class);
         iocContext.registerBean(SecondAutoClosableImpl.class);
         iocContext.registerBean(AutoClosableImplWithException.class);

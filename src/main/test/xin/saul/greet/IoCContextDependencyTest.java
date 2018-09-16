@@ -8,11 +8,11 @@ import xin.saul.greet.testclass.Snack;
 import xin.saul.greet.testclass.Status;
 
 import static org.junit.jupiter.api.Assertions.*;
-public class IocContextDependencyTest {
+public class IoCContextDependencyTest {
     @Test
     void test_should_create_instance_with_dependency_with_had_been_register() throws InstantiationException, IllegalAccessException {
 
-        IocContextImpl iocContext = new IocContextImpl();
+        IoCContextImpl iocContext = new IoCContextImpl();
         iocContext.registerBean(DependencyClass.class);
         iocContext.registerBean(ClassWithDependency.class);
         ClassWithDependency bean = iocContext.getBean(ClassWithDependency.class);
@@ -25,7 +25,7 @@ public class IocContextDependencyTest {
     @Test
     void test_should_create_class_with_dependency_with_had_not_been_register() throws InstantiationException, IllegalAccessException {
 
-        IocContextImpl iocContext = new IocContextImpl();
+        IoCContextImpl iocContext = new IoCContextImpl();
         iocContext.registerBean(ClassWithDependency.class);
         Executable executable= () -> {
             ClassWithDependency bean = iocContext.getBean(ClassWithDependency.class);
@@ -37,7 +37,7 @@ public class IocContextDependencyTest {
     @Test
     void test_should_throw_IllegalStateException_when_a_dependency_cause_cyclic_dependence() throws InstantiationException, IllegalAccessException {
 
-        IocContextImpl iocContext = new IocContextImpl();
+        IoCContextImpl iocContext = new IoCContextImpl();
         iocContext.registerBean(Status.class);
         iocContext.registerBean(Snack.class);
 

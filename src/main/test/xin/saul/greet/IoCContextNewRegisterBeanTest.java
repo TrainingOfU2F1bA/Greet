@@ -5,13 +5,13 @@ import xin.saul.greet.testclass.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class IocContextNewRegisterBeanTest {
+public class IoCContextNewRegisterBeanTest {
 
     @Test
     void test_should_throw_IllegalArgumentException_when_beanClazz_and_resolveClazz_are_both_null() {
 
 
-        IocContextImpl context = new IocContextImpl();
+        IoCContextImpl context = new IoCContextImpl();
         Executable executable =() -> {
             context.registerBean(null,null);
         };
@@ -25,7 +25,7 @@ public class IocContextNewRegisterBeanTest {
     void test_should_throw_IllegalArgumentException_when_beanClazz_is_abstract_class() {
 
 
-        IocContextImpl context = new IocContextImpl();
+        IoCContextImpl context = new IoCContextImpl();
         Executable executable =() -> {
             context.registerBean(GrandMotherClass.class,AbstractMotherClass.class);
         };
@@ -38,7 +38,7 @@ public class IocContextNewRegisterBeanTest {
     void test_should_throw_IllegalArgumentException_when_resolveClazz_is_null() {
 
 
-        IocContextImpl context = new IocContextImpl();
+        IoCContextImpl context = new IoCContextImpl();
         Executable executable =() -> {
             context.registerBean(null,SonClass.class);
         };
@@ -51,7 +51,7 @@ public class IocContextNewRegisterBeanTest {
     void test_should_throw_IllegalArgumentException_when_beanClazz_is_null() {
 
 
-        IocContextImpl context = new IocContextImpl();
+        IoCContextImpl context = new IoCContextImpl();
         Executable executable =() -> {
             context.registerBean(MotherInterface.class,null);
         };
@@ -64,7 +64,7 @@ public class IocContextNewRegisterBeanTest {
     void test_should_throw_IllegalArgumentException_when_beanClazz_is_class_without_default_construct() {
 
 
-        IocContextImpl context = new IocContextImpl();
+        IoCContextImpl context = new IoCContextImpl();
         Executable executable =() -> {
             context.registerBean(MotherInterface.class,ClassWithoutDefaultConstructor.class);
         };
@@ -78,7 +78,7 @@ public class IocContextNewRegisterBeanTest {
     @Test
     void test_should_throw_exception_that_constructor_throw() {
 
-        IocContextImpl context = new IocContextImpl();
+        IoCContextImpl context = new IoCContextImpl();
         context.registerBean(MotherInterface.class,ClassWithBadConstruct.class);
         Executable executable =() -> {
             context.getBean(MotherInterface.class);
@@ -91,7 +91,7 @@ public class IocContextNewRegisterBeanTest {
     @Test
     void test_should_throw_IllegalArgumentException_call_register_bean_while_get_bean_have_been_running() {
 
-        IocContextImpl context = new IocContextImpl();
+        IoCContextImpl context = new IoCContextImpl();
         Executable executable =() -> {
             context.getBean(ClassWithContructRegisterBean.class);
             context.registerBean(MotherInterface.class,ClassWithContructRegisterBean.class);
@@ -103,7 +103,7 @@ public class IocContextNewRegisterBeanTest {
     @Test
     void should_can_get_different_instance_of_different_interface() throws InstantiationException, IllegalAccessException {
 
-        IocContextImpl context = new IocContextImpl();
+        IoCContextImpl context = new IoCContextImpl();
         context.registerBean(MotherInterface.class,SonClass.class);
         context.registerBean(SecondMotherInterface.class,SonClassWithSecondMotherInterface.class);
         MotherInterface bean = context.getBean(MotherInterface.class);
@@ -115,7 +115,7 @@ public class IocContextNewRegisterBeanTest {
 
     @Test
     void should_get_new_instance_when_getbean() throws InstantiationException, IllegalAccessException {
-        IocContextImpl context = new IocContextImpl();
+        IoCContextImpl context = new IoCContextImpl();
 
         context.registerBean(MotherInterface.class,SonClass.class);
 
@@ -128,7 +128,7 @@ public class IocContextNewRegisterBeanTest {
 
     @Test
     void test_should_can_get_instance_with_base_interface() throws InstantiationException, IllegalAccessException {
-        IocContextImpl context = new IocContextImpl();
+        IoCContextImpl context = new IoCContextImpl();
 
         context.registerBean(MotherInterface.class,SonClass.class);
         MotherInterface bean = context.getBean(MotherInterface.class);
@@ -139,7 +139,7 @@ public class IocContextNewRegisterBeanTest {
 
     @Test
     void test_should_cover_after_register_new_class_with_same_interface() throws InstantiationException, IllegalAccessException {
-        IocContextImpl context = new IocContextImpl();
+        IoCContextImpl context = new IoCContextImpl();
 
         context.registerBean(MotherInterface.class,SonClass.class);
         context.registerBean(MotherInterface.class,SecondSonClass.class);
@@ -152,7 +152,7 @@ public class IocContextNewRegisterBeanTest {
 
     @Test
     void test_should_can_get_instance_with_base_class() throws InstantiationException, IllegalAccessException {
-        IocContextImpl context = new IocContextImpl();
+        IoCContextImpl context = new IoCContextImpl();
 
         context.registerBean(MotherClass.class,SubClass.class);
         MotherClass bean = context.getBean(MotherClass.class);
@@ -163,7 +163,7 @@ public class IocContextNewRegisterBeanTest {
 
     @Test
     void test_should_can_get_instance_with_different_base_class_or_interface() throws InstantiationException, IllegalAccessException {
-         IocContextImpl context = new IocContextImpl();
+         IoCContextImpl context = new IoCContextImpl();
 
         context.registerBean(MotherClass.class,SubClass.class);
         context.registerBean(MotherInterface.class,SubClass.class);

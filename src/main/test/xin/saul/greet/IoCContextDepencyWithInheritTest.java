@@ -8,10 +8,10 @@ import xin.saul.greet.testclass.SecondClassWithDependecy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class IocContextDepencyWithInheritTest {
+public class IoCContextDepencyWithInheritTest {
     @Test
     void test_should_create_instance_of_a_class_and_its_base_class_both_have_dependency() throws InstantiationException, IllegalAccessException {
-        IocContextImpl context = new IocContextImpl();
+        IoCContextImpl context = new IoCContextImpl();
         context.registerBean(SecondClassWithDependecy.class);
         context.registerBean(ClassWithDependency.class);
         context.registerBean(MyBean.class);
