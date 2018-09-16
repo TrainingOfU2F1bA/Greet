@@ -115,8 +115,14 @@ public class IocContextImpl implements IoCContext{
 
     @Override
     public void close() throws Exception {
+        Exception exception = null;
         for (AutoCloseable closeable : closableStack) {
-            closeable.close();
+            try {
+                closeable.close();
+            } catch (Exception e) {
+                if (exception == null) exception = e;
+            }
         }
+        if (exception !=null) throw exception;
     }
 }
