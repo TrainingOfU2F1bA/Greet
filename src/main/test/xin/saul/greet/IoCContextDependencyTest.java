@@ -86,4 +86,18 @@ public class IoCContextDependencyTest {
         assertEquals(CycleHeadWithoutInjectAnnotation.class,bean.getClass());
         assertEquals(null,bean.getBody());
     }
+
+    @Test
+    void test_should_throw_IllegalStateException_when_a_dependency_cause_locality_cyclic_dependence() throws InstantiationException, IllegalAccessException {
+           IoCContextImpl context = new IoCContextImpl();
+        context.registerBean(CycleBody.class);
+        context.registerBean(CycleHead.class);
+        context.registerBean(CycleTailWithTwoDependency.class);
+
+        Executable executable = () -> {
+            CycleHead bean = context.getBean(CycleHead.class);
+        };
+
+        assertThrows(RuntimeException.class, executable);
+    }
 }
