@@ -6,10 +6,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 public class IocContextImpl implements IoCContext{
 
     private HashMap<Class<?>, Object> hashMap = new HashMap<>();
+    private Stack<AutoCloseable> closableStack = new Stack<>();
     private boolean isBeenGetingBean;
 
     @Override
@@ -59,6 +61,9 @@ public class IocContextImpl implements IoCContext{
     public <T> T createInstance(Class<T> resolveClazz, Map<Class<?>, Object> map) throws IllegalAccessException, InstantiationException {
         T bean = ((Class<T>) hashMap.get(resolveClazz)).newInstance();
 
+        if (AutoCloseable.class.isInstance(bean)) {
+            closableStack.push((AutoCloseable) bean);
+        }
         map.put(resolveClazz, bean);
 
         Class clz = resolveClazz;
@@ -102,9 +107,16 @@ public class IocContextImpl implements IoCContext{
         try {
             beanClazz.getConstructor();
         } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException(String.format("%s has no default constructor", beanClazz.getName()));
+           throw new IllegalArgumentException(String.format("%s has no default constructor", beanClazz.getName()));
         }
 
         hashMap.put(resolveClazz,beanClazz);
+    }
+
+    @Override
+    public void close() throws Exception {
+        for (AutoCloseable closeable : closableStack) {
+            closeable.close();
+        }
     }
 }

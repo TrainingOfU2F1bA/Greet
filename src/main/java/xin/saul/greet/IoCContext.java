@@ -1,6 +1,6 @@
 package xin.saul.greet;
 
-public interface IoCContext{
+public interface IoCContext extends AutoCloseable{
 
     void registerBean(Class<?> beanClazz) throws IllegalAccessException, InstantiationException, NoSuchMethodException;
 
