@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import xin.saul.greet.testclass.ClassWithDependency;
 import xin.saul.greet.testclass.DependencyClass;
+import xin.saul.greet.testclass.Snack;
+import xin.saul.greet.testclass.Status;
 
 import static org.junit.jupiter.api.Assertions.*;
 public class IocContextDependencyTest {
@@ -31,4 +33,19 @@ public class IocContextDependencyTest {
 
         assertThrows(IllegalStateException.class, executable);
     }
+
+    @Test
+    void test_should_throw_IllegalStateException_when_a_dependency_cause_cyclic_dependence() throws InstantiationException, IllegalAccessException {
+
+        IocContextImpl iocContext = new IocContextImpl();
+        iocContext.registerBean(Status.class);
+        iocContext.registerBean(Snack.class);
+
+        Executable executable = () -> {
+            Snack bean = iocContext.getBean(Snack.class);
+        };
+
+        assertThrows(IllegalStateException.class, executable);
+    }
+
 }

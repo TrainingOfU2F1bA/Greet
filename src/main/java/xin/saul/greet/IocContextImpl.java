@@ -5,6 +5,7 @@ import xin.saul.greet.annotation.CreateOnTheFly;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.Map;
 
 public class IocContextImpl implements IoCContext{
 
@@ -47,23 +48,29 @@ public class IocContextImpl implements IoCContext{
             throw new IllegalStateException("resolveClazz had not be register first");
         }
 
-        T t = createInstance(resolveClazz);
+        Map<Class<?>, Object> map = new HashMap<>();
+        T t = createInstance(resolveClazz,map);
 
         isBeenGetingBean = false;
 
         return t;
     }
 
-    public <T> T createInstance(Class<T> resolveClazz) throws IllegalAccessException, InstantiationException {
-        T bean =((Class<T>) hashMap.get(resolveClazz)).newInstance();
+    public <T> T createInstance(Class<T> resolveClazz, Map<Class<?>, Object> map) throws IllegalAccessException, InstantiationException {
+        T bean = ((Class<T>) hashMap.get(resolveClazz)).newInstance();
+
+        map.put(resolveClazz, bean);
+
         for (Field field : resolveClazz.getDeclaredFields()) {
             field.setAccessible(true);
-            if (field.get(bean) != null) continue;
             if (field.isAnnotationPresent(CreateOnTheFly.class)) {
                 Class<?> type = field.getType();
+                if (map.containsKey(type)) {
+                    throw new IllegalStateException("There is some field casuse cyclic dependence");
+                }
                 if (!hashMap.containsKey(type))
                     throw new IllegalStateException("There is a field which type have not been register");
-                field.set(bean,getBean(type));
+                field.set(bean, createInstance(type,map));
             }
         }
         return bean;
