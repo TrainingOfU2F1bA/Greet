@@ -64,7 +64,7 @@ public class IoCContextImpl implements IoCContext{
         }
 
 
-        injectDependencyField(resolveClazz, map, bean);
+        injectDependencyField((Class<? super T>) hashMap.get(resolveClazz), map, bean);
 
         return bean;
     }
@@ -77,8 +77,6 @@ public class IoCContextImpl implements IoCContext{
         for (Field field : clz.getDeclaredFields()) {
             field.setAccessible(true);
             if (field.isAnnotationPresent(CreateOnTheFly.class)) {
-//                if (map.containsKey(clz))
-//                    throw new IllegalStateException("There is some field casuse cyclic dependence");
 
                 Class<?> type = field.getType();
 

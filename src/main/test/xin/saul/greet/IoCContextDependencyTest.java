@@ -10,6 +10,20 @@ import java.io.PrintStream;
 import static org.junit.jupiter.api.Assertions.*;
 public class IoCContextDependencyTest {
     @Test
+    void test_should_inject_a_implemention_of_interface() throws InstantiationException, IllegalAccessException {
+        IoCContextImpl ioCContext = new IoCContextImpl();
+        ioCContext.registerBean(MotherInterface.class,SonClass.class);
+        ioCContext.registerBean(SecondMotherInterface.class,InjectInterfaceImplClass.class);
+
+
+        SecondMotherInterface bean = ioCContext.getBean(SecondMotherInterface.class);
+
+        assertEquals(InjectInterfaceImplClass.class,bean.getClass());
+        System.out.println(((InjectInterfaceImplClass)bean).getMotherInterface());
+        assertEquals(SonClass.class,((InjectInterfaceImplClass)bean).getMotherInterface().getClass());
+    }
+
+    @Test
     void test_should_initilize_base_class_first_in_while_inject_object() throws InstantiationException, IllegalAccessException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
