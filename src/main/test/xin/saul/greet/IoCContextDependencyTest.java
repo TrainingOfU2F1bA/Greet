@@ -2,10 +2,7 @@ package xin.saul.greet;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import xin.saul.greet.testclass.ClassWithDependency;
-import xin.saul.greet.testclass.DependencyClass;
-import xin.saul.greet.testclass.Snack;
-import xin.saul.greet.testclass.Status;
+import xin.saul.greet.testclass.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 public class IoCContextDependencyTest {
@@ -35,7 +32,7 @@ public class IoCContextDependencyTest {
     }
 
     @Test
-    void test_should_throw_IllegalStateException_when_a_dependency_cause_cyclic_dependence() throws InstantiationException, IllegalAccessException {
+    void test_should_throw_IllegalStateException_when_a_dependency_cause_mutual_cyclic_dependence() throws InstantiationException, IllegalAccessException {
 
         IoCContextImpl iocContext = new IoCContextImpl();
         iocContext.registerBean(Status.class);
@@ -48,4 +45,45 @@ public class IoCContextDependencyTest {
         assertThrows(IllegalStateException.class, executable);
     }
 
+    @Test
+    void test_should_throw_IllegalStateException_when_a_dependency_cause_self_cyclic_dependency() {
+        IoCContextImpl context = new IoCContextImpl();
+        context.registerBean(Node.class);
+
+
+        Executable executable = () -> {
+            Node bean = context.getBean(Node.class);
+        };
+
+        assertThrows(IllegalStateException.class, executable);
+    }
+
+    @Test
+    void test_should_throw_IllegalStateException_when_a_dependency_cause_indirect_cyclic_dependence() {
+         IoCContextImpl context = new IoCContextImpl();
+        context.registerBean(CycleBody.class);
+        context.registerBean(CycleHead.class);
+        context.registerBean(CycleTail.class);
+
+
+        Executable executable = () -> {
+            CycleHead bean = context.getBean(CycleHead.class);
+        };
+
+        assertThrows(RuntimeException.class, executable);
+    }
+
+    @Test
+    void test_should_create_instance_when_no_inject_annotation() throws InstantiationException, IllegalAccessException {
+          IoCContextImpl context = new IoCContextImpl();
+        context.registerBean(CycleBody.class);
+        context.registerBean(CycleHeadWithoutInjectAnnotation.class);
+        context.registerBean(CycleTail.class);
+
+
+        CycleHeadWithoutInjectAnnotation bean = context.getBean(CycleHeadWithoutInjectAnnotation.class);
+
+        assertEquals(CycleHeadWithoutInjectAnnotation.class,bean.getClass());
+        assertEquals(null,bean.getBody());
+    }
 }
