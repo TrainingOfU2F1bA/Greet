@@ -1,13 +1,16 @@
-package xin.saul.greet;
+package greet;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import xin.saul.greet.IoCContextImpl;
 import xin.saul.greet.testclass.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class IoCContextDependencyTest {
     @Test
     void test_should_inject_a_implemention_of_interface() throws InstantiationException, IllegalAccessException {
