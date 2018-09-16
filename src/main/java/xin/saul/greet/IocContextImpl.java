@@ -61,7 +61,17 @@ public class IocContextImpl implements IoCContext{
 
         map.put(resolveClazz, bean);
 
-        for (Field field : resolveClazz.getDeclaredFields()) {
+        Class clz = resolveClazz;
+
+        injectDependencyField(clz, map, bean);
+
+
+        return bean;
+    }
+
+    private <T> void injectDependencyField(Class<T> clz, Map<Class<?>, Object> map, T bean) throws IllegalAccessException, InstantiationException {
+        if (!clz.isInterface() && !clz.getSuperclass().equals(Object.class)) injectDependencyField(clz.getSuperclass(),map,bean);
+        for (Field field : clz.getDeclaredFields()) {
             field.setAccessible(true);
             if (field.isAnnotationPresent(CreateOnTheFly.class)) {
                 Class<?> type = field.getType();
@@ -73,7 +83,6 @@ public class IocContextImpl implements IoCContext{
                 field.set(bean, createInstance(type,map));
             }
         }
-        return bean;
     }
 
     @Override
