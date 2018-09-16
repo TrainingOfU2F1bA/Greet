@@ -1,9 +1,11 @@
 package xin.saul.greet;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import xin.saul.greet.testclass.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class IoCContextDepencyWithInheritTest {
     @Test
@@ -37,5 +39,19 @@ public class IoCContextDepencyWithInheritTest {
         assertEquals(MyBean.class,bean.getMyBean().getClass());
         assertEquals(DependencyClass.class,bean.getDependencyClass().getClass());
         assertEquals(DependencyClass.class,bean.getSameDependencyWithGradFather().getClass());
+    }
+
+    @Test
+    void test_should_throw_IllegalStateException_when_a_dependency_cause_locality_cyclic_dependence() {
+        IoCContextImpl context = new IoCContextImpl();
+        context.registerBean(CycleBody.class);
+        context.registerBean(CycleHead.class);
+        context.registerBean(CycleTailWithTwoDependency.class);
+
+        Executable executable = () -> {
+            CycleHead bean = context.getBean(CycleHead.class);
+        };
+
+        assertThrows(RuntimeException.class, executable);
     }
 }

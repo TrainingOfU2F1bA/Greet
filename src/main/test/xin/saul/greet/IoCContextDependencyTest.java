@@ -48,7 +48,7 @@ public class IoCContextDependencyTest {
     }
 
     @Test
-    void test_should_throw_IllegalStateException_when_a_dependency_cause_mutual_cyclic_dependence() throws InstantiationException, IllegalAccessException {
+    void test_should_throw_IllegalStateException_when_a_dependency_cause_mutual_cyclic_dependence() {
 
         IoCContextImpl iocContext = new IoCContextImpl();
         iocContext.registerBean(Status.class);
@@ -103,17 +103,4 @@ public class IoCContextDependencyTest {
         assertEquals(null,bean.getBody());
     }
 
-    @Test
-    void test_should_throw_IllegalStateException_when_a_dependency_cause_locality_cyclic_dependence() throws InstantiationException, IllegalAccessException {
-           IoCContextImpl context = new IoCContextImpl();
-        context.registerBean(CycleBody.class);
-        context.registerBean(CycleHead.class);
-        context.registerBean(CycleTailWithTwoDependency.class);
-
-        Executable executable = () -> {
-            CycleHead bean = context.getBean(CycleHead.class);
-        };
-
-        assertThrows(RuntimeException.class, executable);
-    }
 }
