@@ -63,6 +63,7 @@ public class ClosableIocContextTest {
 
         iocContext.getBean(AutoClosableImpl.class);
         iocContext.getBean(AutoClosableImplWithException.class);
+        iocContext.registerBean(AutoClosableImplWithIllegalArgumentException.class);
         iocContext.getBean(SecondAutoClosableImpl.class);
 
         Executable executable = () ->{
