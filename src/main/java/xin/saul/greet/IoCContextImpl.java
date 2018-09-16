@@ -56,7 +56,7 @@ public class IoCContextImpl implements IoCContext{
         return t;
     }
 
-    public <T> T createInstance(Class<T> resolveClazz, Map<Class<?>, List<Class<?>>> map) throws IllegalAccessException, InstantiationException {
+    private <T> T createInstance(Class<T> resolveClazz, Map<Class<?>, List<Class<?>>> map) throws IllegalAccessException, InstantiationException {
         T bean = ((Class<T>) hashMap.get(resolveClazz)).newInstance();
 
         if (AutoCloseable.class.isInstance(bean)) {
@@ -87,7 +87,7 @@ public class IoCContextImpl implements IoCContext{
 
                 dependencesList.add(implType);
 
-                isCyclic(map, implType , implType);
+                validateCyclic(map, implType , implType);
 
                 Object instance = createInstance(type, map);
 
@@ -96,7 +96,7 @@ public class IoCContextImpl implements IoCContext{
         }
     }
 
-    private <T> boolean isCyclic(Map<Class<?>, List<Class<?>>> map, Class<?> type, Class<T> clz) {
+    private <T> void validateCyclic(Map<Class<?>, List<Class<?>>> map, Class<?> type, Class<T> clz) {
         List<Class<?>> dependences = map.get(type);
 
         if (dependences !=null)
@@ -104,9 +104,8 @@ public class IoCContextImpl implements IoCContext{
             if (dependence.equals(clz))
                 throw new IllegalStateException("There is some field casuse cyclic dependence");
             else
-                isCyclic(map, dependence, clz);
+                validateCyclic(map, dependence, clz);
         }
-        return false;
     }
 
     @Override
