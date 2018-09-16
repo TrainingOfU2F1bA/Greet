@@ -1,7 +1,6 @@
-package greet;
+package xin.saul.greet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import xin.saul.greet.IoCContextImpl;
 import xin.saul.greet.testclass.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +30,7 @@ public class IoCContextNewRegisterBeanTest {
             context.registerBean(GrandMotherClass.class,AbstractMotherClass.class);
         };
 
-        assertThrows(IllegalArgumentException.class, executable,"xin.saul.greet.testclass.MotherClass is abstract");
+        assertThrows(IllegalArgumentException.class, executable,"xin.saul.xin.saul.greet.testclass.MotherClass is abstract");
 
     }
 
@@ -70,7 +69,7 @@ public class IoCContextNewRegisterBeanTest {
             context.registerBean(MotherInterface.class,ClassWithoutDefaultConstructor.class);
         };
 
-        assertThrows(IllegalArgumentException.class, executable,"xin.saul.greet.testclass.ClassWithoutDefaultConstructor has no default constructor");
+        assertThrows(IllegalArgumentException.class, executable,"xin.saul.xin.saul.greet.testclass.ClassWithoutDefaultConstructor has no default constructor");
 
     }
 

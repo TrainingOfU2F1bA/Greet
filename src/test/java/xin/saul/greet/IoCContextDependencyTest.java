@@ -1,8 +1,7 @@
-package greet;
+package xin.saul.greet;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import xin.saul.greet.IoCContextImpl;
 import xin.saul.greet.testclass.*;
 
 import java.io.ByteArrayOutputStream;
