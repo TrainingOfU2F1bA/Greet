@@ -8,5 +8,5 @@ public class CycleTailWithTwoDependency extends ThirdClassWithDependecy{
     MyBean myBean;
 
     @CreateOnTheFly
-    CycleHead head;
+    CycleHeadWithNewCycleBody head;
 }

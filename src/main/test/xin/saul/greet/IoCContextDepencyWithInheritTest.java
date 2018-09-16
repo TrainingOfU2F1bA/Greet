@@ -44,14 +44,35 @@ public class IoCContextDepencyWithInheritTest {
     @Test
     void test_should_throw_IllegalStateException_when_a_dependency_cause_locality_cyclic_dependence() {
         IoCContextImpl context = new IoCContextImpl();
-        context.registerBean(CycleBody.class);
-        context.registerBean(CycleHead.class);
+        context.registerBean(CycleHeadWithNewCycleBody.class);
+        context.registerBean(NewCycleBody.class);
         context.registerBean(CycleTailWithTwoDependency.class);
 
+        context.registerBean(SecondClassWithDependecy.class);
+        context.registerBean(ClassWithDependency.class);
+        context.registerBean(DependencyClass.class);
+        context.registerBean(ThirdClassWithDependecy.class);
+        context.registerBean(MyBean.class);
+
         Executable executable = () -> {
-            CycleHead bean = context.getBean(CycleHead.class);
+            CycleHeadWithNewCycleBody bean = context.getBean(CycleHeadWithNewCycleBody.class);
         };
 
-        assertThrows(RuntimeException.class, executable);
+        assertThrows(IllegalStateException.class, executable);
     }
+
+    @Test
+    void test_should_distingush_a_cycle_dependency_even_if_dependency_is_a_interface() {
+        IoCContextImpl context = new IoCContextImpl();
+        context.registerBean(CycleBodyWithSecondTail.class);
+        context.registerBean(CycleHeadInterface.class,CycleSecondHead.class);
+        context.registerBean(CycleSecondTail.class);
+
+        Executable executable = () -> {
+            CycleHead bean = (CycleHead) context.getBean(CycleHeadInterface.class);
+        };
+
+        assertThrows(IllegalStateException.class, executable);
+    }
+
 }

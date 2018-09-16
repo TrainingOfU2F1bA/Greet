@@ -83,9 +83,11 @@ public class IoCContextImpl implements IoCContext{
                 if (!hashMap.containsKey(type))
                     throw new IllegalStateException("There is a field which type have not been register");
 
-                dependencesList.add(type);
+                Class<?> implType = (Class<?>) hashMap.get(type);
 
-                isCyclic(map, type , type);
+                dependencesList.add(implType);
+
+                isCyclic(map, implType , implType);
 
                 Object instance = createInstance(type, map);
 
