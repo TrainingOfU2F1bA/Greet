@@ -106,9 +106,9 @@ public class IoCContextDependencyTest {
     @Test
     void test_should_create_instance_when_no_inject_annotation() throws InstantiationException, IllegalAccessException {
           IoCContextImpl context = new IoCContextImpl();
-        context.registerBean(CycleBody.class);
         context.registerBean(CycleHeadWithoutInjectAnnotation.class);
-        context.registerBean(CycleTail.class);
+        context.registerBean(CycleBodyWithInjectAnnotaion.class);
+        context.registerBean(CycleTailWithInjectAnnotaion.class);
 
 
         CycleHeadWithoutInjectAnnotation bean = context.getBean(CycleHeadWithoutInjectAnnotation.class);

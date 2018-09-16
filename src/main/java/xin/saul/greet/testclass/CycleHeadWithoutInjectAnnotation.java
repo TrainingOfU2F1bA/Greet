@@ -1,9 +1,9 @@
 package xin.saul.greet.testclass;
 
 public class CycleHeadWithoutInjectAnnotation {
-    CycleBody body;
+    CycleBodyWithInjectAnnotaion body;
 
-    public CycleBody getBody() {
+    public CycleBodyWithInjectAnnotaion getBody() {
         return body;
     }
 }
