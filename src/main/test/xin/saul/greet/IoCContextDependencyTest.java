@@ -4,8 +4,24 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import xin.saul.greet.testclass.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 public class IoCContextDependencyTest {
+    @Test
+    void test_should_initilize_base_class_first_in_while_inject_object() throws InstantiationException, IllegalAccessException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+        IoCContextImpl iocContext = new IoCContextImpl();
+        iocContext.registerBean(Cow.class);
+        iocContext.registerBean(LittleCow.class);
+
+        iocContext.getBean(LittleCow.class);
+
+        assertEquals("It is a CowIt is a LittleCow",out.toString());
+    }
+
     @Test
     void test_should_create_instance_with_dependency_with_had_been_register() throws InstantiationException, IllegalAccessException {
 
